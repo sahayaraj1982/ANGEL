@@ -3,107 +3,152 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Master Control Panel V81 - Cloud Sync</title>
+    <title>Master Control Panel V82 - Full Scale</title>
     <style>
-        body { font-family: Arial, sans-serif; background-color: #f4f4f4; padding: 20px; }
-        .container { max-width: 800px; margin: auto; background: white; padding: 20px; border-radius: 10px; box-shadow: 0px 0px 10px rgba(0,0,0,0.1); }
-        h2 { text-align: center; color: #333; border-bottom: 2px solid #007bff; padding-bottom: 10px; }
-        .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 20px; }
-        .item { display: flex; flex-direction: column; padding: 10px; border: 1px solid #ddd; border-radius: 5px; background: #fafafa; }
-        label { font-weight: bold; margin-bottom: 5px; color: #555; }
-        input { padding: 8px; border: 1px solid #ccc; border-radius: 4px; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f4f7f6; margin: 0; padding: 0; }
+        .header-bar { background: #1a73e8; color: white; padding: 15px 20px; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 1000; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+        .bell-container { cursor: pointer; position: relative; font-size: 24px; }
+        .bell-badge { position: absolute; top: -5px; right: -5px; background: #ff3b30; color: white; border-radius: 50%; padding: 2px 6px; font-size: 12px; font-weight: bold; }
+        .container { max-width: 900px; margin: 20px auto; background: white; padding: 30px; border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); }
+        h2 { text-align: center; color: #333; margin-top: 0; border-bottom: 2px solid #1a73e8; padding-bottom: 10px; }
+        .activation-area { background: #fff9db; border: 2px dashed #fcc419; padding: 20px; border-radius: 10px; margin-bottom: 30px; text-align: center; }
+        .activation-area h3 { margin-top: 0; color: #856404; font-size: 16px; }
+        .date-picker { padding: 10px; font-size: 16px; border: 1px solid #ccc; border-radius: 5px; width: 200px; margin-bottom: 10px; }
+        .btn-set-date { background: #fcc419; color: #333; border: none; padding: 10px 20px; border-radius: 5px; font-weight: bold; cursor: pointer; transition: 0.3s; }
+        .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 10px; }
+        .item { display: flex; flex-direction: column; background: #fcfcfc; border: 1px solid #eee; padding: 15px; border-radius: 8px; transition: 0.3s; }
+        label { font-weight: bold; margin-bottom: 8px; color: #555; font-size: 14px; }
+        input { padding: 10px; border: 1px solid #ddd; border-radius: 5px; font-size: 14px; transition: 0.3s; }
+        .section-header { grid-column: span 2; background: #343a40; color: white; padding: 10px 15px; margin-top: 25px; border-radius: 5px; font-weight: bold; }
         .full-width { grid-column: span 2; }
-        .btn-save { width: 100%; padding: 15px; background: #28a745; color: white; border: none; border-radius: 5px; font-size: 18px; cursor: pointer; margin-top: 20px; font-weight: bold; }
-        .btn-save:disabled { background: #ccc; cursor: not-allowed; }
-        .status { text-align: center; margin-top: 10px; font-weight: bold; color: blue; }
-        .section-title { grid-column: span 2; background: #007bff; color: white; padding: 5px 10px; margin-top: 15px; border-radius: 3px; }
-        #loadingOverlay { text-align: center; font-weight: bold; color: #007bff; margin-bottom: 10px; }
+        .btn-save { width: 100%; padding: 20px; background: #28a745; color: white; border: none; border-radius: 8px; font-size: 20px; font-weight: bold; cursor: pointer; margin-top: 40px; transition: 0.3s; box-shadow: 0 4px 15px rgba(40, 167, 69, 0.3); }
+        .status { text-align: center; margin-top: 20px; font-weight: bold; font-size: 16px; }
+        #loadingMsg { text-align: center; color: #1a73e8; font-weight: bold; padding: 50px; }
     </style>
 </head>
 <body>
 
-<div class="container">
-    <h2>MASTER CONTROL PANEL - V81 (CLOUD)</h2>
-    <p style="text-align:center; font-size: 12px; color: #888;">Date: 01-03-2026</p>
-    
-    <div id="loadingOverlay">டேட்டா லோடு ஆகிறது... காத்திருக்கவும்.</div>
+<div class="header-bar">
+    <div style="font-size: 22px; font-weight: bold;">ANGEL BOOK V82 - MASTER</div>
+    <div style="display: flex; align-items: center; gap: 20px;">
+        <span style="font-size: 14px;">[01-03-2026]</span>
+        <div class="bell-container" onclick="showNotification()">
+            🔔<span class="bell-badge" id="notifBadge">!</span>
+        </div>
+    </div>
+</div>
 
-    <div class="grid" id="controlGrid">
-        <div class="section-title">General Settings (1-32)</div>
+<div class="container">
+    <h2>கண்ட்ரோல் பேனல் - முழுமையான பதிப்பு</h2>
+
+    <div class="activation-area">
+        <h3>📅 காலண்டர் ஆக்டிவேஷன் (Activation Date)</h3>
+        <p style="font-size: 13px; color: #666;">இந்தத் தேதி முதல் மென்பொருள் செயல்படத் தொடங்கும்</p>
+        <input type="date" id="activeDateInput" class="date-picker">
+        <button class="btn-set-date" onclick="updateActivationDate()">SET DATE</button>
+        <div id="currentActiveDate" style="margin-top: 10px; font-weight: bold; color: #d9480f;"></div>
+    </div>
+
+    <div id="loadingMsg">Cloud-ல் இருந்து உங்கள் 42 ஆப்ஷன்களும் லோடு ஆகிறது... ⏳</div>
+
+    <div class="grid" id="mainGrid" style="display:none;">
+        <div class="section-header">பொதுவான அமைப்புகள் (General Settings 1-32)</div>
+        
         <script>
+            // 1 முதல் 32 வரையிலான அனைத்து ஆப்ஷன்களும் இங்கே உள்ளன
             for(let i=1; i<=32; i++) {
                 document.write(`
                     <div class="item">
-                        <label>Option ${i}</label>
-                        <input type="text" id="opt${i}" placeholder="Enter value">
+                        <label>ஆப்ஷன் ${i}</label>
+                        <input type="text" id="opt${i}" placeholder="Enter data for ${i}">
                     </div>
                 `);
             }
         </script>
 
-        <div class="section-title">Security & Cloud (33-42)</div>
+        <div class="section-header">பாதுகாப்பு மற்றும் மேகக்கணினி (Security & Cloud 33-42)</div>
+        
         <div class="item"><label>33. Login PIN</label><input type="password" id="opt33"></div>
         <div class="item"><label>34. Admin PIN</label><input type="password" id="opt34"></div>
-        <div class="item"><label>35. Backup Frequency</label><input type="text" id="opt35"></div>
-        <div class="item"><label>36. System Alert</label><input type="text" id="opt36"></div>
-        <div class="item"><label>37. User Access</label><input type="text" id="opt37"></div>
-        <div class="item"><label>38. Data Encryption</label><input type="text" id="opt38"></div>
-        <div class="item"><label>39. Log History</label><input type="text" id="opt39"></div>
-        <div class="item"><label>40. Auto Sync</label><input type="text" id="opt40"></div>
-        <div class="item"><label>41. Recovery Mail</label><input type="email" id="opt41"></div>
-        <div class="item full-width"><label>42. Google Drive Link</label><input type="text" id="opt42"></div>
+        <div class="item"><label>35. Backup Sync</label><input type="text" id="opt35"></div>
+        <div class="item"><label>36. Bell Message (அறிவிப்பு)</label><input type="text" id="opt36"></div>
+        <div class="item"><label>37. User Access Mode</label><input type="text" id="opt37"></div>
+        <div class="item"><label>38. Data Encryption Key</label><input type="text" id="opt38"></div>
+        <div class="item"><label>39. Transaction Log History</label><input type="text" id="opt39"></div>
+        <div class="item"><label>40. Auto Refresh Timing</label><input type="text" id="opt40"></div>
+        <div class="item"><label>41. Recovery Email Address</label><input type="email" id="opt41"></div>
+        <div class="item full-width"><label>42. Google Drive Cloud Link</label><input type="text" id="opt42" placeholder="Paste your Google Drive Folder Link here"></div>
     </div>
 
-    <button id="saveBtn" class="btn-save" onclick="saveToCloud()">SAVE ALL DATA TO CLOUD</button>
+    <button class="btn-save" id="saveButton" onclick="saveData()">அனைத்து தகவல்களையும் சேமி (SAVE ALL DATA)</button>
     <div id="statusMsg" class="status"></div>
 </div>
 
 <script>
-    // உங்கள் கூகுள் வெப் ஆப் லிங்க் இங்கே இணைக்கப்பட்டுள்ளது
     const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyCe3j8C0hIbs5dLlnz9_wjtmhPy6vOXJ8G6SYbxbuROhKC9Z3P0AuoN-zJtRibVEEE/exec";
 
     window.onload = function() {
         fetch(SCRIPT_URL)
         .then(res => res.json())
         .then(data => {
+            // 42 ஆப்ஷன்களையும் சரியாக லோடு செய்கிறது
             for (let i = 1; i <= 42; i++) {
-                if (data['opt' + i]) {
-                    document.getElementById('opt' + i).value = data['opt' + i];
-                }
+                if (data['opt' + i]) document.getElementById('opt' + i).value = data['opt' + i];
             }
-            document.getElementById('loadingOverlay').style.display = 'none';
+            // காலண்டர் தேதியை லோடு செய்கிறது (Option 43)
+            if(data['opt43']) {
+                document.getElementById('activeDateInput').value = data['opt43'];
+                document.getElementById('currentActiveDate').innerText = "தற்போதைய ஆக்டிவேஷன் தேதி: " + data['opt43'];
+            }
+            document.getElementById('loadingMsg').style.display = 'none';
+            document.getElementById('mainGrid').style.display = 'grid';
         })
         .catch(err => {
-            console.error("Error loading data:", err);
-            document.getElementById('loadingOverlay').innerText = "டேட்டா லோடு செய்வதில் சிக்கல்!";
+            document.getElementById('loadingMsg').innerText = "புதிய பதிவு செய்ய நீங்கள் தயார்!";
+            document.getElementById('mainGrid').style.display = 'grid';
         });
     };
 
-    function saveToCloud() {
-        const saveBtn = document.getElementById('saveBtn');
-        const statusMsg = document.getElementById('statusMsg');
-        saveBtn.disabled = true;
-        statusMsg.innerText = "Cloud-ல் சேமிக்கப்படுகிறது... ⏳";
+    function showNotification() {
+        const msg = document.getElementById('opt36').value || "தற்போது அறிவிப்புகள் ஏதுமில்லை.";
+        alert("🔔 அறிவிப்பு:\n\n" + msg);
+    }
 
-        const dataToSave = {};
+    function updateActivationDate() {
+        const d = document.getElementById('activeDateInput').value;
+        if(!d) return alert("தயவுசெய்து தேதியைத் தேர்ந்தெடுக்கவும்!");
+        document.getElementById('currentActiveDate').innerText = "மாற்றப்படுகிறது... ⏳";
+        saveData(d);
+    }
+
+    function saveData(customDate = null) {
+        const btn = document.getElementById('saveButton');
+        const status = document.getElementById('statusMsg');
+        btn.disabled = true;
+        status.innerText = "Cloud-ல் சேமிக்கப்படுகிறது... ⏳";
+
+        const finalData = {};
         for (let i = 1; i <= 42; i++) {
-            dataToSave['opt' + i] = document.getElementById('opt' + i).value;
+            finalData['opt' + i] = document.getElementById('opt' + i).value;
         }
+        // 43-வது ஆப்ஷனாக காலண்டர் தேதி சேமிக்கப்படுகிறது
+        finalData['opt43'] = customDate || document.getElementById('activeDateInput').value;
 
         fetch(SCRIPT_URL, {
             method: "POST",
             mode: "no-cors",
-            body: JSON.stringify(dataToSave)
+            body: JSON.stringify(finalData)
         })
         .then(() => {
-            statusMsg.innerText = "டேட்டா கூகுள் ஷீட்டில் பத்திரமாக சேமிக்கப்பட்டது! ✅";
-            statusMsg.style.color = "green";
-            saveBtn.disabled = false;
-            setTimeout(() => { statusMsg.innerText = ""; }, 3000);
+            status.innerText = "வாழ்த்துகள்! அனைத்து தகவல்களும் சேமிக்கப்பட்டது! ✅";
+            status.style.color = "green";
+            btn.disabled = false;
+            if(customDate) document.getElementById('currentActiveDate').innerText = "ஆக்டிவேஷன் தேதி மாற்றப்பட்டது: " + customDate;
+            setTimeout(() => { status.innerText = ""; }, 4000);
         })
-        .catch(err => {
-            alert("சேமிப்பதில் தோல்வி! மீண்டும் முயற்சிக்கவும்.");
-            saveBtn.disabled = false;
+        .catch(() => {
+            alert("பிழை! மீண்டும் முயற்சிக்கவும்.");
+            btn.disabled = false;
         });
     }
 </script>
