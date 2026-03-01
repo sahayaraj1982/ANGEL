@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="ta">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Master Control Panel V81 - Cloud Sync</title>
+    <style>
+        body { font-family: Arial, sans-serif; background-color: #f4f4f4; padding: 20px; }
+        .container { max-width: 800px; margin: auto; background: white; padding: 20px; border-radius: 10px; box-shadow: 0px 0px 10px rgba(0,0,0,0.1); }
+        h2 { text-align: center; color: #333; border-bottom: 2px solid #007bff; padding-bottom: 10px; }
+        .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 20px; }
+        .item { display: flex; flex-direction: column; padding: 10px; border: 1px solid #ddd; border-radius: 5px; background: #fafafa; }
+        label { font-weight: bold; margin-bottom: 5px; color: #555; }
+        input { padding: 8px; border: 1px solid #ccc; border-radius: 4px; }
+        .full-width { grid-column: span 2; }
+        .btn-save { width: 100%; padding: 15px; background: #28a745; color: white; border: none; border-radius: 5px; font-size: 18px; cursor: pointer; margin-top: 20px; font-weight: bold; }
+        .btn-save:disabled { background: #ccc; cursor: not-allowed; }
+        .status { text-align: center; margin-top: 10px; font-weight: bold; color: blue; }
+        .section-title { grid-column: span 2; background: #007bff; color: white; padding: 5px 10px; margin-top: 15px; border-radius: 3px; }
+        #loadingOverlay { text-align: center; font-weight: bold; color: #007bff; margin-bottom: 10px; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h2>MASTER CONTROL PANEL - V81 (CLOUD)</h2>
+    <p style="text-align:center; font-size: 12px; color: #888;">Date: 01-03-2026</p>
+    
+    <div id="loadingOverlay">டேட்டா லோடு ஆகிறது... காத்திருக்கவும்.</div>
+
+    <div class="grid" id="controlGrid">
+        <div class="section-title">General Settings (1-32)</div>
+        <script>
+            for(let i=1; i<=32; i++) {
+                document.write(`
+                    <div class="item">
+                        <label>Option ${i}</label>
+                        <input type="text" id="opt${i}" placeholder="Enter value">
+                    </div>
+                `);
+            }
+        </script>
+
+        <div class="section-title">Security & Cloud (33-42)</div>
+        <div class="item"><label>33. Login PIN</label><input type="password" id="opt33"></div>
+        <div class="item"><label>34. Admin PIN</label><input type="password" id="opt34"></div>
+        <div class="item"><label>35. Backup Frequency</label><input type="text" id="opt35"></div>
+        <div class="item"><label>36. System Alert</label><input type="text" id="opt36"></div>
+        <div class="item"><label>37. User Access</label><input type="text" id="opt37"></div>
+        <div class="item"><label>38. Data Encryption</label><input type="text" id="opt38"></div>
+        <div class="item"><label>39. Log History</label><input type="text" id="opt39"></div>
+        <div class="item"><label>40. Auto Sync</label><input type="text" id="opt40"></div>
+        <div class="item"><label>41. Recovery Mail</label><input type="email" id="opt41"></div>
+        <div class="item full-width"><label>42. Google Drive Link</label><input type="text" id="opt42"></div>
+    </div>
+
+    <button id="saveBtn" class="btn-save" onclick="saveToCloud()">SAVE ALL DATA TO CLOUD</button>
+    <div id="statusMsg" class="status"></div>
+</div>
+
+<script>
+    // உங்கள் கூகுள் வெப் ஆப் லிங்க் இங்கே இணைக்கப்பட்டுள்ளது
+    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyCe3j8C0hIbs5dLlnz9_wjtmhPy6vOXJ8G6SYbxbuROhKC9Z3P0AuoN-zJtRibVEEE/exec";
+
+    window.onload = function() {
+        fetch(SCRIPT_URL)
+        .then(res => res.json())
+        .then(data => {
+            for (let i = 1; i <= 42; i++) {
+                if (data['opt' + i]) {
+                    document.getElementById('opt' + i).value = data['opt' + i];
+                }
+            }
+            document.getElementById('loadingOverlay').style.display = 'none';
+        })
+        .catch(err => {
+            console.error("Error loading data:", err);
+            document.getElementById('loadingOverlay').innerText = "டேட்டா லோடு செய்வதில் சிக்கல்!";
+        });
+    };
+
+    function saveToCloud() {
+        const saveBtn = document.getElementById('saveBtn');
+        const statusMsg = document.getElementById('statusMsg');
+        saveBtn.disabled = true;
+        statusMsg.innerText = "Cloud-ல் சேமிக்கப்படுகிறது... ⏳";
+
+        const dataToSave = {};
+        for (let i = 1; i <= 42; i++) {
+            dataToSave['opt' + i] = document.getElementById('opt' + i).value;
+        }
+
+        fetch(SCRIPT_URL, {
+            method: "POST",
+            mode: "no-cors",
+            body: JSON.stringify(dataToSave)
+        })
+        .then(() => {
+            statusMsg.innerText = "டேட்டா கூகுள் ஷீட்டில் பத்திரமாக சேமிக்கப்பட்டது! ✅";
+            statusMsg.style.color = "green";
+            saveBtn.disabled = false;
+            setTimeout(() => { statusMsg.innerText = ""; }, 3000);
+        })
+        .catch(err => {
+            alert("சேமிப்பதில் தோல்வி! மீண்டும் முயற்சிக்கவும்.");
+            saveBtn.disabled = false;
+        });
+    }
+</script>
+
+</body>
+</html>
